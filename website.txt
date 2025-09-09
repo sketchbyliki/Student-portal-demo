@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    button {
+      width: 95%;
+      padding: 10px;
+      background: #2575fc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #6a11cb;
+    }
+    .toggle-link {
+      margin-top: 15px;
+      display: block;
+      color: #2575fc;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    /* Portal Styling */
+    #portal {
+      display: none;
+      text-align: left;
+    }
+    .student-info {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+    .logout-btn {
+      margin-top: 20px;
+      width: 100%;
+      background: crimson;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login Form -->
+    <div id="loginForm">
+      <h2>Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button onclick="login()">Login</button>
+      <span class="toggle-link" onclick="toggleForm('signupForm')">Don't have an account? Sign up</span>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signupForm" style="display:none;">
+      <h2>Sign Up</h2>
+      <input type="text" id="signupName" placeholder="Full Name" required>
+      <input type="email" id="signupEmail" placeholder="Email" required>
+      <input type="password" id="signupPassword" placeholder="Password" required>
+      <input type="password" placeholder="Confirm Password" required>
+      <button onclick="signup()">Sign Up</button>
+      <span class="toggle-link" onclick="toggleForm('loginForm')">Already have an account? Login</span>
+    </div>
+
+    <!-- Student Portal -->
+    <div id="portal">
+      <h2>🎓 Student Portal</h2>
+      <div class="student-info">
+        <p><b>Name:</b> <span id="studentName"></span></p>
+        <p><b>Email:</b> <span id="studentEmail"></span></p>
+        <p><b>Course:</b> B.Tech Computer Science</p>
+        <p><b>Year:</b> 3rd Year</p>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleForm(formId) {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('portal').style.display = 'none';
+      document.getElementById(formId).style.display = 'block';
+    }
+
+    function signup() {
+      let name = document.getElementById('signupName').value;
+      let email = document.getElementById('signupEmail').value;
+      let password = document.getElementById('signupPassword').value;
+
+      if(name && email && password) {
+        localStorage.setItem('studentName', name);
+        localStorage.setItem('studentEmail', email);
+        localStorage.setItem('studentPassword', password);
+        alert("Signup successful! Please login.");
+        toggleForm('loginForm');
+      } else {
+        alert("Please fill all fields.");
+      }
+    }
+
+    function login() {
+      let email = document.getElementById('loginEmail').value;
+      let password = document.getElementById('loginPassword').value;
+
+      let storedEmail = localStorage.getItem('studentEmail');
+      let storedPassword = localStorage.getItem('studentPassword');
+      let storedName = localStorage.getItem('studentName');
+
+      if(email === storedEmail && password === storedPassword) {
+        document.getElementById('studentName').innerText = storedName;
+        document.getElementById('studentEmail').innerText = storedEmail;
+        toggleForm('portal');
+      } else {
+        alert("Invalid email or password.");
+      }
+    }
+
+    function logout() {
+      toggleForm('loginForm');
+    }
+  </script>
+</body>
+</html>
